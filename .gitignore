@@ -1,0 +1,13 @@
+/bin/
+.classpath
+.project
+/org.eclipse.jdt.core.prefs
+.settings/
+*.iml
+.idea/*
+out/*
+*.iml
+.class
+.*jar
+.*war
+*.ear
