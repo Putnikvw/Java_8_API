@@ -8,17 +8,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.toMap;
 
 public class WriteMap {
 
-    private final String fileAbbreviationsPath = "files/abbreviations.txt";
-    private final String fileStartPath = "files/start.log";
-    private final String fileEndPath = "files/end.log";
+    private final String ABBREVIATION_FILE_PATH = "files/abbreviations.txt";
+    private final String STARTLOG_FILE_PATH = "files/start.log";
+    private final String ENDLOG_FILE_PATH = "files/end.log";
 
     private Map<String, String> lapTimeMap;
     private Map<String, String> abbrevMap;
@@ -28,7 +26,6 @@ public class WriteMap {
         return lapTimeMap;
     }
 
-
     public Map<String, String> getAbbrevMap() {
         return abbrevMap;
     }
@@ -36,8 +33,8 @@ public class WriteMap {
     public WriteMap() {
 
         try {
-            countTimeLap();
-            writeAbbrevMap();
+            countLapTime();
+            setAbbrevMap();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -46,13 +43,13 @@ public class WriteMap {
 
     }
 
-    private void countTimeLap() throws IOException, ParseException {
+    private void countLapTime() throws IOException, ParseException {
 
         Map<String, Date> startLogMap = new HashMap<>();
         Map<String, Date> endLogMap = new HashMap<>();
         Map<String, String> tempMap = new HashMap<>();
-        writeLogMaps(fileStartPath, startLogMap);
-        writeLogMaps(fileEndPath, endLogMap);
+        setLogMaps(STARTLOG_FILE_PATH, startLogMap);
+        setLogMaps(ENDLOG_FILE_PATH, endLogMap);
 
         for (Map.Entry<String, Date> entry : startLogMap.entrySet()) {
             tempMap.put(entry.getKey(), getTimeDiff(entry.getValue(), endLogMap.get(entry.getKey())));
@@ -62,23 +59,20 @@ public class WriteMap {
     }
 
 
-    private void writeLogMaps(String filePath, Map<String, Date> exitMap) throws IOException, ParseException {
+    private void setLogMaps(String filePath, Map<String, Date> exitMap) throws IOException, ParseException {
 
         Map<String, String> myMap = Files.lines(Paths.get(filePath)).filter(v -> !v.trim().isEmpty()).
                 collect(toMap(x -> x.substring(0, 3), x -> x.substring(3, x.length())));
 
-        Iterator it = myMap.entrySet().iterator();
         SimpleDateFormat currentDateTime = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            exitMap.put((String) pair.getKey(), currentDateTime.parse((String) pair.getValue()));
-            it.remove();
+        for (Map.Entry<String, String> entry: myMap.entrySet()) {
+            exitMap.put(entry.getKey(), currentDateTime.parse(entry.getValue()));
         }
     }
 
-    private void writeAbbrevMap() throws IOException {
+    private void setAbbrevMap() throws IOException {
 
-        abbrevMap = Files.lines(Paths.get(fileAbbreviationsPath)).filter(v -> !v.trim().isEmpty()).
+        abbrevMap = Files.lines(Paths.get(ABBREVIATION_FILE_PATH)).filter(v -> !v.trim().isEmpty()).
                 collect(toMap(x -> x.substring(0, 3), x -> x.substring(4, x.length())));
 
 
