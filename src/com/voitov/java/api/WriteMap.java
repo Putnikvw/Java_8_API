@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.LinkedHashMap;
+
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.toMap;
 
@@ -35,9 +36,7 @@ public class WriteMap {
         try {
             countLapTime();
             setAbbrevMap();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
 
@@ -62,10 +61,10 @@ public class WriteMap {
     private void setLogMaps(String filePath, Map<String, Date> exitMap) throws IOException, ParseException {
 
         Map<String, String> myMap = Files.lines(Paths.get(filePath)).filter(v -> !v.trim().isEmpty()).
-                collect(toMap(x -> x.substring(0, 3), x -> x.substring(3, x.length())));
+                collect(toMap(x -> x.substring(0, 3), x -> x.substring(3)));
 
         SimpleDateFormat currentDateTime = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
-        for (Map.Entry<String, String> entry: myMap.entrySet()) {
+        for (Map.Entry<String, String> entry : myMap.entrySet()) {
             exitMap.put(entry.getKey(), currentDateTime.parse(entry.getValue()));
         }
     }
@@ -73,7 +72,7 @@ public class WriteMap {
     private void setAbbrevMap() throws IOException {
 
         abbrevMap = Files.lines(Paths.get(ABBREVIATION_FILE_PATH)).filter(v -> !v.trim().isEmpty()).
-                collect(toMap(x -> x.substring(0, 3), x -> x.substring(4, x.length())));
+                collect(toMap(x -> x.substring(0, 3), x -> x.substring(4)));
 
 
     }
