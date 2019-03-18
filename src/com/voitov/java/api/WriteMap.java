@@ -19,10 +19,6 @@ public class WriteMap {
     private static final String STARTLOG_FILE_PATH = "files/start.log";
     private static final String ENDLOG_FILE_PATH = "files/end.log";
 
-    private Map<String, String> lapTimeMap;
-    private Map<String, String> abbrevMap;
-
-
     public Map<String, String> countLapTime() throws IOException, ParseException {
 
         Map<String, Date> startLogMap = new HashMap<>();
@@ -34,7 +30,7 @@ public class WriteMap {
         for (Map.Entry<String, Date> entry : startLogMap.entrySet()) {
             tempMap.put(entry.getKey(), getTimeDiff(entry.getValue(), endLogMap.get(entry.getKey())));
         }
-        return lapTimeMap = tempMap.entrySet().stream()
+        return tempMap.entrySet().stream()
                 .sorted(comparingByValue())
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
 
@@ -55,7 +51,7 @@ public class WriteMap {
 
     public Map<String, String> getAbbrevMap() throws IOException {
 
-        return abbrevMap = Files.lines(Paths.get(ABBREVIATION_FILE_PATH))
+        return Files.lines(Paths.get(ABBREVIATION_FILE_PATH))
                 .filter(v -> !v.trim().isEmpty())
                 .collect(toMap(x -> x.substring(0, 3), x -> x.substring(4)));
 
