@@ -15,34 +15,15 @@ import static java.util.stream.Collectors.toMap;
 
 public class WriteMap {
 
-    private final String ABBREVIATION_FILE_PATH = "files/abbreviations.txt";
-    private final String STARTLOG_FILE_PATH = "files/start.log";
-    private final String ENDLOG_FILE_PATH = "files/end.log";
+    private static final String ABBREVIATION_FILE_PATH = "files/abbreviations.txt";
+    private static final String STARTLOG_FILE_PATH = "files/start.log";
+    private static final String ENDLOG_FILE_PATH = "files/end.log";
 
     private Map<String, String> lapTimeMap;
     private Map<String, String> abbrevMap;
 
 
-    public Map<String, String> getLapTimeMap() {
-        return lapTimeMap;
-    }
-
-    public Map<String, String> getAbbrevMap() {
-        return abbrevMap;
-    }
-
-    public WriteMap() {
-
-        try {
-            countLapTime();
-            setAbbrevMap();
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void countLapTime() throws IOException, ParseException {
+    public Map<String, String> countLapTime() throws IOException, ParseException {
 
         Map<String, Date> startLogMap = new HashMap<>();
         Map<String, Date> endLogMap = new HashMap<>();
@@ -53,15 +34,18 @@ public class WriteMap {
         for (Map.Entry<String, Date> entry : startLogMap.entrySet()) {
             tempMap.put(entry.getKey(), getTimeDiff(entry.getValue(), endLogMap.get(entry.getKey())));
         }
-        lapTimeMap = tempMap.entrySet().stream().sorted(comparingByValue()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+        return lapTimeMap = tempMap.entrySet().stream()
+                .sorted(comparingByValue())
+                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
 
     }
 
 
     private void setLogMaps(String filePath, Map<String, Date> exitMap) throws IOException, ParseException {
 
-        Map<String, String> myMap = Files.lines(Paths.get(filePath)).filter(v -> !v.trim().isEmpty()).
-                collect(toMap(x -> x.substring(0, 3), x -> x.substring(3)));
+        Map<String, String> myMap = Files.lines(Paths.get(filePath))
+                .filter(v -> !v.trim().isEmpty())
+                .collect(toMap(x -> x.substring(0, 3), x -> x.substring(3)));
 
         SimpleDateFormat currentDateTime = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
         for (Map.Entry<String, String> entry : myMap.entrySet()) {
@@ -69,10 +53,11 @@ public class WriteMap {
         }
     }
 
-    private void setAbbrevMap() throws IOException {
+    public Map<String, String> getAbbrevMap() throws IOException {
 
-        abbrevMap = Files.lines(Paths.get(ABBREVIATION_FILE_PATH)).filter(v -> !v.trim().isEmpty()).
-                collect(toMap(x -> x.substring(0, 3), x -> x.substring(4)));
+        return abbrevMap = Files.lines(Paths.get(ABBREVIATION_FILE_PATH))
+                .filter(v -> !v.trim().isEmpty())
+                .collect(toMap(x -> x.substring(0, 3), x -> x.substring(4)));
 
 
     }

@@ -2,6 +2,7 @@ package com.voitov.java.api;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class JUnit_WriteMap {
 
     @Test
-    public void checkCountMapTimeForRacer() throws ParseException {
+    public void checkCountMapTimeForRacer() throws ParseException, IOException {
 
         WriteMap monacoRacers = new WriteMap();
         String racerKey = "SVF";
@@ -19,18 +20,18 @@ class JUnit_WriteMap {
         Date finishLapTime = dateTimeFormat.parse("2018-05-24_12:04:03.332");
         String resultTime = (new SimpleDateFormat("mm:ss:SSS")).format(new Date(finishLapTime.getTime() - startLapTime.getTime()));
 
-        assertEquals(resultTime, monacoRacers.getLapTimeMap().get(racerKey));
+        assertEquals(resultTime, monacoRacers.countLapTime().get(racerKey));
     }
 
     @Test
-    public void checkFinalPrintStringForRacer() {
+    public void checkFinalPrintStringForRacer() throws IOException, ParseException {
         WriteMap finalRacersList = new WriteMap();
         String racerKey = "BHS";
         String equalsList = "12. Brendon Hartley\t\t| SCUDERIA TORO ROSSO HONDA\t| 01:13:179\n";
         StringBuilder racerExamplePrint = new StringBuilder();
 
         racerExamplePrint.append("12. ").append(finalRacersList.getAbbrevMap().get(racerKey).replace("_", "\t\t| ")).
-                    append("\t| ").append(finalRacersList.getLapTimeMap().get(racerKey)).append("\n");
+                    append("\t| ").append(finalRacersList.countLapTime().get(racerKey)).append("\n");
 
         assertEquals(equalsList, racerExamplePrint.toString());
 
