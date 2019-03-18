@@ -16,9 +16,16 @@ public class PrintRacer {
                     .getAbbrevMap()
                     .get(entry.getKey());
 
-            racers.append(count).append(". ").append(nameRacer.replace("_", "\t\t| ")).append("\t| ").append(entry.getValue()).append("\n");
+            racers.append(count).append(". ")
+                    .append(nameRacer.replace("_", "\t\t| "))
+                    .append("\t| ")
+                    .append(entry.getValue())
+                    .append("\n");
+
             if (count == 15) {
-                racers.append("\n").append("-------------------------------------------------------").append("\n\n");
+                racers.append("\n")
+                        .append("-------------------------------------------------------")
+                        .append("\n\n");
             }
             count++;
         }
