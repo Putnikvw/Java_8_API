@@ -6,17 +6,16 @@ import java.util.Map;
 
 public class PrintRacer {
 
-    public String printRacersResult() throws IOException, ParseException {
+    public String printRacersResult(Map<String, String> mapRacersTime, Map<String, String> mapAbbrev) throws IOException, ParseException {
 
-        WriteMap mapResult = new WriteMap();
         StringBuilder racers = new StringBuilder();
         int count = 1;
-        for (Map.Entry<String, String> entry : mapResult.countLapTime().entrySet()) {
-            String nameRacer = mapResult
-                    .getAbbrevMap()
+        for (Map.Entry<String, String> entry : mapRacersTime.entrySet()) {
+            String nameRacer = mapAbbrev
                     .get(entry.getKey());
 
-            racers.append(count).append(". ")
+            racers.append(count)
+                    .append(". ")
                     .append(nameRacer.replace("_", "\t\t| "))
                     .append("\t| ")
                     .append(entry.getValue())

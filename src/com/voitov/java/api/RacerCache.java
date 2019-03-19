@@ -1,31 +1,36 @@
 package com.voitov.java.api;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.LinkedHashMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.toMap;
 
-public class WriteMap {
+public class RacerCache {
 
-    private static final String ABBREVIATION_FILE_PATH = "files/abbreviations.txt";
-    private static final String STARTLOG_FILE_PATH = "files/start.log";
-    private static final String ENDLOG_FILE_PATH = "files/end.log";
+    private Map<String, String> abbrevMap;
+    private Map<String, String> racerTimeMap;
 
-    public Map<String, String> countLapTime() throws IOException, ParseException {
+
+    public Map<String, String> getAbbrevMap(String abbrevData) throws IOException {
+
+        return Arrays.asList(abbrevData.split("\n"))
+                .stream()
+                .collect(Collectors.toMap(x -> x.substring(0, 3), x -> x.substring(4)));
+    }
+
+    public Map<String, String> countLapTime(String startLogData, String endLogData) throws IOException, ParseException {
 
         Map<String, Date> startLogMap = new HashMap<>();
         Map<String, Date> endLogMap = new HashMap<>();
         Map<String, String> tempMap = new HashMap<>();
-        setLogMaps(STARTLOG_FILE_PATH, startLogMap);
-        setLogMaps(ENDLOG_FILE_PATH, endLogMap);
+
+        setLogMaps(startLogData, startLogMap);
+        setLogMaps(endLogData, endLogMap);
+
 
         for (Map.Entry<String, Date> entry : startLogMap.entrySet()) {
             tempMap.put(entry.getKey(), getTimeDiff(entry.getValue(), endLogMap.get(entry.getKey())));
@@ -39,8 +44,8 @@ public class WriteMap {
 
     private void setLogMaps(String filePath, Map<String, Date> exitMap) throws IOException, ParseException {
 
-        Map<String, String> myMap = Files.lines(Paths.get(filePath))
-                .filter(v -> !v.trim().isEmpty())
+        Map<String, String> myMap = Arrays.asList(filePath.split("\n"))
+                .stream()
                 .collect(toMap(x -> x.substring(0, 3), x -> x.substring(3)));
 
         SimpleDateFormat currentDateTime = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
@@ -49,18 +54,8 @@ public class WriteMap {
         }
     }
 
-    public Map<String, String> getAbbrevMap() throws IOException {
-
-        return Files.lines(Paths.get(ABBREVIATION_FILE_PATH))
-                .filter(v -> !v.trim().isEmpty())
-                .collect(toMap(x -> x.substring(0, 3), x -> x.substring(4)));
-
-
-    }
-
     private String getTimeDiff(Date start, Date end) {
         return (new SimpleDateFormat("mm:ss:SSS")).format(new Date(end.getTime() - start.getTime()));
     }
 
 }
-
