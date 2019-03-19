@@ -1,9 +1,12 @@
 package com.voitov.java.api;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 import static java.util.Map.Entry.comparingByValue;
@@ -11,14 +14,14 @@ import static java.util.stream.Collectors.toMap;
 
 public class RacerCache {
 
-    public Map<String, String> getAbbrevMap(String abbrevData) throws IOException {
+    public Map<String, String> getAbbrevMap(String abbrevData) {
 
         return Arrays.asList(abbrevData.split("\n"))
                 .stream()
                 .collect(Collectors.toMap(x -> x.substring(0, 3), x -> x.substring(4)));
     }
 
-    public Map<String, String> countLapTime(String startLogData, String endLogData) throws IOException, ParseException {
+    public Map<String, String> countLapTime(String startLogData, String endLogData) throws ParseException {
 
         Map<String, Date> startLogMap = new HashMap<>();
         Map<String, Date> endLogMap = new HashMap<>();
@@ -38,7 +41,7 @@ public class RacerCache {
     }
 
 
-    private void setLogMaps(String filePath, Map<String, Date> exitMap) throws IOException, ParseException {
+    private void setLogMaps(String filePath, Map<String, Date> exitMap) throws ParseException {
 
         Map<String, String> myMap = Arrays.asList(filePath.split("\n"))
                 .stream()

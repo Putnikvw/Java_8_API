@@ -2,7 +2,6 @@ package com.voitov.java.api;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class JUnit_WriteMap {
 
     @Test
-    public void checkCountMapTimeForRacer() throws ParseException, IOException {
+    public void checkCountMapTimeForRacer() throws ParseException {
 
         ReadFile monacoRacers = new ReadFile();
         RacerCache _racerCache = new RacerCache();
@@ -27,7 +26,7 @@ class JUnit_WriteMap {
     }
 
     @Test
-    public void checkFinalPrintStringForRacer() throws IOException, ParseException {
+    public void checkFinalPrintStringForRacer() throws ParseException {
         ReadFile file = new ReadFile();
         RacerCache _racerCache = new RacerCache();
         Map<String, String> racerTimeMap = _racerCache.countLapTime(file.getStartLogFile(), file.getEndLogFile());
