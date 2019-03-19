@@ -11,10 +11,6 @@ import static java.util.stream.Collectors.toMap;
 
 public class RacerCache {
 
-    private Map<String, String> abbrevMap;
-    private Map<String, String> racerTimeMap;
-
-
     public Map<String, String> getAbbrevMap(String abbrevData) throws IOException {
 
         return Arrays.asList(abbrevData.split("\n"))
