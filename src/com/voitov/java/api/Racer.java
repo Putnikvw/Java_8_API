@@ -2,12 +2,13 @@ package com.voitov.java.api;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Arrays;
-import java.util.Date;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
+
+
 
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.toMap;
@@ -27,15 +28,15 @@ public class Racer {
 
     public Map<String, String> countLapTime(String startLogData, String endLogData) throws ParseException {
 
-        Map<String, Date> startLogMap = new HashMap<>();
-        Map<String, Date> endLogMap = new HashMap<>();
+        Map<String, LocalDateTime> startLogMap = new HashMap<>();
+        Map<String, LocalDateTime> endLogMap = new HashMap<>();
         Map<String, String> tempMap = new HashMap<>();
 
         setLogMaps(startLogData, startLogMap);
         setLogMaps(endLogData, endLogMap);
 
 
-        for (Map.Entry<String, Date> entry : startLogMap.entrySet()) {
+        for (Map.Entry<String, LocalDateTime> entry : startLogMap.entrySet()) {
             tempMap.put(entry.getKey(), getTimeDiff(entry.getValue(), endLogMap.get(entry.getKey())));
         }
         return tempMap.entrySet().stream()
@@ -45,20 +46,20 @@ public class Racer {
     }
 
 
-    private void setLogMaps(String filePath, Map<String, Date> exitMap) throws ParseException {
+    private void setLogMaps(String filePath, Map<String, LocalDateTime> exitMap) throws ParseException {
 
         Map<String, String> myMap = Arrays.asList(filePath.split("\n"))
                 .stream()
                 .collect(toMap(x -> x.substring(0, 3), x -> x.substring(3)));
 
-        SimpleDateFormat currentDateTime = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
+        DateTimeFormatter currentDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
         for (Map.Entry<String, String> entry : myMap.entrySet()) {
-            exitMap.put(entry.getKey(), currentDateTime.parse(entry.getValue()));
+            exitMap.put(entry.getKey(), LocalDateTime.parse(entry.getValue(), currentDateTime));
         }
     }
 
-    private String getTimeDiff(Date start, Date end) {
-        return (new SimpleDateFormat("mm:ss:SSS")).format(new Date(end.getTime() - start.getTime()));
+    private String getTimeDiff(LocalDateTime start, LocalDateTime end) {
+        return (new SimpleDateFormat("mm:ss:SSS")).format(Duration.between(start, end).toMillis());
     }
 
 }
