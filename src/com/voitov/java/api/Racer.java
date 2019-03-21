@@ -1,17 +1,18 @@
 package com.voitov.java.api;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
-
-
 
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.toMap;
+
 
 public class Racer {
 
@@ -26,27 +27,27 @@ public class Racer {
                 .collect(Collectors.toMap(x -> x.substring(0, 3), x -> x.substring(4)));
     }
 
-    public Map<String, String> countLapTime(String startLogData, String endLogData) throws ParseException {
+    public Map<String, String> countLapTime(String startLogData, String endLogData) {
 
         Map<String, LocalDateTime> startLogMap = new HashMap<>();
         Map<String, LocalDateTime> endLogMap = new HashMap<>();
         Map<String, String> tempMap = new HashMap<>();
 
-        setLogMaps(startLogData, startLogMap);
-        setLogMaps(endLogData, endLogMap);
+        setTime(startLogData, startLogMap);
+        setTime(endLogData, endLogMap);
 
 
         for (Map.Entry<String, LocalDateTime> entry : startLogMap.entrySet()) {
             tempMap.put(entry.getKey(), getTimeDiff(entry.getValue(), endLogMap.get(entry.getKey())));
         }
-        return tempMap.entrySet().stream()
+        return time = tempMap.entrySet().stream()
                 .sorted(comparingByValue())
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
 
     }
 
 
-    private void setLogMaps(String filePath, Map<String, LocalDateTime> exitMap) throws ParseException {
+    private void setTime(String filePath, Map<String, LocalDateTime> exitMap) {
 
         Map<String, String> myMap = Arrays.asList(filePath.split("\n"))
                 .stream()

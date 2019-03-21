@@ -2,9 +2,9 @@ package com.voitov.java.api;
 
 import java.util.Map;
 
-public class PrintRacer {
+public class Painter {
 
-    public void printRacersResult(Map<String, String> mapRacersTime, Map<String, String> mapAbbrev) {
+    public String printRacersResult(Map<String, String> mapRacersTime, Map<String, String> mapAbbrev) {
 
         StringBuilder racers = new StringBuilder();
         int count = 1;
@@ -26,6 +26,6 @@ public class PrintRacer {
             }
             count++;
         }
-        System.out.println(racers.toString());
+        return racers.toString();
     }
 }

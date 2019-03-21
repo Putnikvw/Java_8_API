@@ -8,8 +8,8 @@ public class Main {
         Racer racerTime = new Racer();
         Racer racerAbbrev = new Racer();
         FileData file = new FileData();
-        PrintRacer racers = new PrintRacer();
-        racers.printRacersResult(racerTime.countLapTime(file.getStartLogFile(), file.getEndLogFile()),
-                racerAbbrev.getAbbrevMap(file.getAbbrevFile()));
+        Painter racers = new Painter();
+        System.out.println(racers.printRacersResult(racerTime.countLapTime(file.getStartLogFile(), file.getEndLogFile()),
+                racerAbbrev.getAbbrevMap(file.getAbbrevFile())));
     }
 }
