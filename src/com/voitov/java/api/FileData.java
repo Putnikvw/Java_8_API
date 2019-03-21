@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class ReadFile {
+public class FileData {
 
     private static final String ABBREVIATION_FILE_PATH = "files/abbreviations.txt";
     private static final String STARTLOG_FILE_PATH = "files/start.log";

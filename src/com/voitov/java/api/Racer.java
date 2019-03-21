@@ -12,7 +12,11 @@ import java.util.stream.Collectors;
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.toMap;
 
-public class RacerCache {
+public class Racer {
+
+    private Map<String, String> name;
+    private Map<String, String> car;
+    private Map<String, String> time;
 
     public Map<String, String> getAbbrevMap(String abbrevData) {
 

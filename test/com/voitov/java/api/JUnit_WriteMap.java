@@ -14,8 +14,8 @@ class JUnit_WriteMap {
     @Test
     public void checkCountMapTimeForRacer() throws ParseException {
 
-        ReadFile monacoRacers = new ReadFile();
-        RacerCache _racerCache = new RacerCache();
+        FileData monacoRacers = new FileData();
+        Racer _racerCache = new Racer();
         String racerKey = "SVF";
         SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
         Date startLapTime = dateTimeFormat.parse("2018-05-24_12:02:58.917");
@@ -27,8 +27,8 @@ class JUnit_WriteMap {
 
     @Test
     public void checkFinalPrintStringForRacer() throws ParseException {
-        ReadFile file = new ReadFile();
-        RacerCache _racerCache = new RacerCache();
+        FileData file = new FileData();
+        Racer _racerCache = new Racer();
         Map<String, String> racerTimeMap = _racerCache.countLapTime(file.getStartLogFile(), file.getEndLogFile());
         Map<String, String> racerAbbrev = _racerCache.getAbbrevMap(file.getAbbrevFile());
         String racerKey = "BHS";
