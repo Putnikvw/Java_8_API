@@ -9,54 +9,57 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.toMap;
 
 
 public class Racer {
 
-    private Map<String, String> name;
-    private Map<String, String> car;
-    private Map<String, String> time;
-
-    public Map<String, String> getAbbrevMap(String abbrevData) {
-
-        return Arrays.asList(abbrevData.split("\n"))
-                .stream()
-                .collect(Collectors.toMap(x -> x.substring(0, 3), x -> x.substring(4)));
+    public Map<String, String> getName() {
+        return getFullRacerName(new FileData().getAbbrevFile());
     }
 
-    public Map<String, String> countLapTime(String startLogData, String endLogData) {
+    public Map<String, String> getCar() {
+        return getFullRacerCar(new FileData().getAbbrevFile());
+    }
 
-        Map<String, LocalDateTime> startLogMap = new HashMap<>();
-        Map<String, LocalDateTime> endLogMap = new HashMap<>();
+    public Map<String, String> getTime() {
+        return sortedRacerTime();
+    }
+
+    private Map<String, String> getFullRacerName(String abbrevData) {
+
+        return Arrays.stream(abbrevData.split("\n"))
+                .collect(Collectors.toMap(x -> x.substring(0, 3), x -> x.substring(4, x.lastIndexOf("_"))));
+    }
+
+    private Map<String, String> getFullRacerCar(String abbrevData) {
+
+        return Arrays.stream(abbrevData.split("\n"))
+                .collect(Collectors.toMap(x -> x.substring(0, 3), x -> x.substring(x.lastIndexOf("_") + 1)));
+    }
+
+    private Map<String, String> sortedRacerTime() {
+
         Map<String, String> tempMap = new HashMap<>();
-
-        setTime(startLogData, startLogMap);
-        setTime(endLogData, endLogMap);
-
-
-        for (Map.Entry<String, LocalDateTime> entry : startLogMap.entrySet()) {
-            tempMap.put(entry.getKey(), getTimeDiff(entry.getValue(), endLogMap.get(entry.getKey())));
+        FileData fileName = new FileData();
+        for (Map.Entry<String, LocalDateTime> entry : readLogFileTime(fileName.getStartLogFile()).entrySet()) {
+            String timeLap = getTimeDiff(entry.getValue(), readLogFileTime(fileName.getEndLogFile()).get(entry.getKey()));
+            tempMap.put(entry.getKey(), timeLap);
         }
-        return time = tempMap.entrySet().stream()
+        return tempMap.entrySet().stream()
                 .sorted(comparingByValue())
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
 
     }
 
-
-    private void setTime(String filePath, Map<String, LocalDateTime> exitMap) {
-
-        Map<String, String> myMap = Arrays.asList(filePath.split("\n"))
-                .stream()
-                .collect(toMap(x -> x.substring(0, 3), x -> x.substring(3)));
+    private Map<String, LocalDateTime> readLogFileTime(String filePath) {
 
         DateTimeFormatter currentDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
-        for (Map.Entry<String, String> entry : myMap.entrySet()) {
-            exitMap.put(entry.getKey(), LocalDateTime.parse(entry.getValue(), currentDateTime));
-        }
+        return Arrays.asList(filePath.split("\n"))
+                .stream()
+                .collect(toMap(x -> x.substring(0, 3), x -> LocalDateTime.parse(x.substring(3), currentDateTime)));
+
     }
 
     private String getTimeDiff(LocalDateTime start, LocalDateTime end) {
