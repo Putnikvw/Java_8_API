@@ -56,8 +56,7 @@ public class Racer {
     private Map<String, LocalDateTime> readLogFileTime(String filePath) {
 
         DateTimeFormatter currentDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
-        return Arrays.asList(filePath.split("\n"))
-                .stream()
+        return Arrays.stream(filePath.split("\n"))
                 .collect(toMap(x -> x.substring(0, 3), x -> LocalDateTime.parse(x.substring(3), currentDateTime)));
 
     }
