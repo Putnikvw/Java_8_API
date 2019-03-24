@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -15,29 +16,11 @@ import static java.util.stream.Collectors.toMap;
 
 public class Racer {
 
-    private Map<String, String> name;
-    private Map<String, String> car;
-    private Map<String, String> time;
+    private String name;
+    private String abbrev;
+    private String car;
+    private LocalDateTime time;
 
-    public Racer(FileData files) {
-        getFullRacerName(files.getAbbrevFile());
-        getFullRacerCar(files.getAbbrevFile());
-        sortedRacerTime(files);
-    }
-
-    public Map<String, String> getName() {
-        return name;
-    }
-
-    public Map<String, String> getCar() {
-
-        return car;
-    }
-
-    public Map<String, String> getTime() {
-
-        return time;
-    }
 
     private void getFullRacerName(String abbrevData) {
 
@@ -58,9 +41,9 @@ public class Racer {
             String timeLap = getTimeDiff(entry.getValue(), readLogFileTime(timeFile.getEndLogFile()).get(entry.getKey()));
             tempMap.put(entry.getKey(), timeLap);
         }
-        time = tempMap.entrySet().stream()
-                .sorted(comparingByValue())
-                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+//        time = tempMap.entrySet().stream()
+//                .sorted(comparingByValue())
+//                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
 
     }
 
@@ -72,8 +55,8 @@ public class Racer {
 
     }
 
-    private String getTimeDiff(LocalDateTime start, LocalDateTime end) {
-        return (new SimpleDateFormat("mm:ss:SSS")).format(Duration.between(start, end).toMillis());
+    private long getTimeDiff(LocalDateTime start, LocalDateTime end) {
+        return Duration.between(start, end).toMillis();
     }
 
 }
