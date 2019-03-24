@@ -8,46 +8,57 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.toMap;
 
 
 public class Racer {
 
+    private Map<String, String> name;
+    private Map<String, String> car;
+    private Map<String, String> time;
+
+    public Racer(FileData files) {
+        getFullRacerName(files.getAbbrevFile());
+        getFullRacerCar(files.getAbbrevFile());
+        sortedRacerTime(files);
+    }
+
     public Map<String, String> getName() {
-        return getFullRacerName(new FileData().getAbbrevFile());
+        return name;
     }
 
     public Map<String, String> getCar() {
-        return getFullRacerCar(new FileData().getAbbrevFile());
+
+        return car;
     }
 
     public Map<String, String> getTime() {
-        return sortedRacerTime();
+
+        return time;
     }
 
-    private Map<String, String> getFullRacerName(String abbrevData) {
+    private void getFullRacerName(String abbrevData) {
 
-        return Arrays.stream(abbrevData.split("\n"))
-                .collect(Collectors.toMap(x -> x.substring(0, 3), x -> x.substring(4, x.lastIndexOf("_"))));
+        name = Arrays.stream(abbrevData.split("\n"))
+                .collect(toMap(x -> x.substring(0, 3), x -> x.substring(4, x.lastIndexOf("_"))));
     }
 
-    private Map<String, String> getFullRacerCar(String abbrevData) {
+    private void getFullRacerCar(String abbrevData) {
 
-        return Arrays.stream(abbrevData.split("\n"))
-                .collect(Collectors.toMap(x -> x.substring(0, 3), x -> x.substring(x.lastIndexOf("_") + 1)));
+        car = Arrays.stream(abbrevData.split("\n"))
+                .collect(toMap(x -> x.substring(0, 3), x -> x.substring(x.lastIndexOf("_") + 1)));
     }
 
-    private Map<String, String> sortedRacerTime() {
+    private void sortedRacerTime(FileData timeFile) {
 
         Map<String, String> tempMap = new HashMap<>();
-        FileData fileName = new FileData();
-        for (Map.Entry<String, LocalDateTime> entry : readLogFileTime(fileName.getStartLogFile()).entrySet()) {
-            String timeLap = getTimeDiff(entry.getValue(), readLogFileTime(fileName.getEndLogFile()).get(entry.getKey()));
+        for (Map.Entry<String, LocalDateTime> entry : readLogFileTime(timeFile.getStartLogFile()).entrySet()) {
+            String timeLap = getTimeDiff(entry.getValue(), readLogFileTime(timeFile.getEndLogFile()).get(entry.getKey()));
             tempMap.put(entry.getKey(), timeLap);
         }
-        return tempMap.entrySet().stream()
+        time = tempMap.entrySet().stream()
                 .sorted(comparingByValue())
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
 

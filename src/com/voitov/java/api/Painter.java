@@ -6,11 +6,11 @@ public class Painter {
 
     public String printRacersResult(Racer racer) {
 
-        StringBuilder raceList = new StringBuilder();
+        StringBuilder race = new StringBuilder();
         int count = 1;
         for (Map.Entry<String, String> entry : racer.getTime().entrySet()) {
 
-            raceList.append(count)
+            race.append(count)
                     .append(". ")
                     .append(racer.getName().get(entry.getKey()))
                     .append("\t\t| ")
@@ -20,12 +20,12 @@ public class Painter {
                     .append("\n");
 
             if (count == 15) {
-                raceList.append("\n")
+                race.append("\n")
                         .append("-------------------------------------------------------")
                         .append("\n\n");
             }
             count++;
         }
-        return raceList.toString();
+        return race.toString();
     }
 }

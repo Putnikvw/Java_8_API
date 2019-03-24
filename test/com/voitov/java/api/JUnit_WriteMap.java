@@ -14,7 +14,7 @@ class JUnit_WriteMap {
     @Test
     public void checkTimeForRacer() {
 
-        Racer racer = new Racer();
+        Racer racer = new Racer(new FileData());
         String racerKey = "SVF";
         DateTimeFormatter timePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
         LocalDateTime startLapTime = LocalDateTime.parse("2018-05-24_12:02:58.917", timePattern);
@@ -27,7 +27,7 @@ class JUnit_WriteMap {
     @Test
     public void checkCarTitleForRacer() {
 
-        Racer racer = new Racer();
+        Racer racer = new Racer(new FileData());
         String racerKey = "MES";
         String fullCarTitle = "SAUBER FERRARI";
 
@@ -37,7 +37,7 @@ class JUnit_WriteMap {
     @Test
     public void checkFullNameForRacer() {
 
-        Racer racer = new Racer();
+        Racer racer = new Racer(new FileData());
         String racerKey = "FAM";
         String fullRacerName = "Fernando Alonso";
 
