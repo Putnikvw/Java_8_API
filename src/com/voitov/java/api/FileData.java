@@ -2,12 +2,12 @@ package com.voitov.java.api;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 public class FileData {
 
@@ -28,13 +28,26 @@ public class FileData {
         return readFile(ABBREVIATION_FILE_PATH);
     }
 
-    private void some() throws IOException {
-        String abbrev = Files.lines(Paths.get(ABBREVIATION_FILE_PATH)).filter(v -> !v.trim().isEmpty()).forEach();                                                                                                          ) {
+    public void createRacer() {
+        StringBuilder finalString = new StringBuilder();
+        for(String loop: getAbbrevFile().split("\n"))
+        {
+            String startTime = Arrays.stream(getStartLogFile()
+                    .split("\n"))
+                    .filter(x -> x.contains(loop.substring(0, 3)))
+                    .map(x -> x.substring(3))
+                    .findFirst().toString();
+            String endTime = Arrays.stream(getEndLogFile()
+                    .split("\n"))
+                    .filter(x -> x.contains(loop.substring(0, 3)))
+                    .map(x -> x.substring(3))
+                    .findFirst().toString();
 
+            finalString.append(loop).append(countLapTime(startTime, endTime));
+            getRacer(finalString.toString());
         }
 
     }
-
 
     private String readFile(String filePath) {
         StringBuilder log = new StringBuilder();
@@ -55,7 +68,7 @@ public class FileData {
         racer.setAbbrev(fileDataString.substring(0, fileDataString.indexOf("_")));
         racer.setName(fileDataString.substring(fileDataString.indexOf("_") + 1, fileDataString.lastIndexOf("_")));
         racer.setCar(fileDataString.substring(fileDataString.lastIndexOf("_")));
-        racer.setTime(LocalDateTime.parse(fileDataString, currentDateTime));
+        racer.setTime(LocalDateTime.parse(fileDataString.substring(fileDataString.lastIndexOf("_")), currentDateTime));
         return racer;
 
     }

@@ -1,11 +1,12 @@
 package com.voitov.java.api;
 
 
+import java.util.Map;
+
 public class Main {
     public static void main(String[] args) {
-
-        Painter race = new Painter();
+        Map<Integer, Racer> racerList;
         FileData file = new FileData();
-        System.out.println(race.printRacersResult(new Racer(file)));
+
     }
 }
