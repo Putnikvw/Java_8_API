@@ -21,23 +21,27 @@ public class Racer {
     private String car;
     private LocalDateTime time;
 
-
-    private void getFullRacerName(String abbrevData) {
-
-        name = Arrays.stream(abbrevData.split("\n"))
-                .collect(toMap(x -> x.substring(0, 3), x -> x.substring(4, x.lastIndexOf("_"))));
+    public void setName(String name) {
+        this.name = name;
     }
 
-    private void getFullRacerCar(String abbrevData) {
-
-        car = Arrays.stream(abbrevData.split("\n"))
-                .collect(toMap(x -> x.substring(0, 3), x -> x.substring(x.lastIndexOf("_") + 1)));
+    public void setAbbrev(String abbrev) {
+        this.abbrev = abbrev;
     }
+
+    public void setCar(String car) {
+        this.car = car;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
+    }
+
 
     private void sortedRacerTime(FileData timeFile) {
 
         Map<String, String> tempMap = new HashMap<>();
-        for (Map.Entry<String, LocalDateTime> entry : readLogFileTime(timeFile.getStartLogFile()).entrySet()) {
+        for (Map.Entry<String, String> entry : readLogFileTime(timeFile.getStartLogFile()).entrySet()) {
             String timeLap = getTimeDiff(entry.getValue(), readLogFileTime(timeFile.getEndLogFile()).get(entry.getKey()));
             tempMap.put(entry.getKey(), timeLap);
         }
@@ -55,8 +59,8 @@ public class Racer {
 
     }
 
-    private long getTimeDiff(LocalDateTime start, LocalDateTime end) {
-        return Duration.between(start, end).toMillis();
+    private String getTimeDiff(LocalDateTime start, LocalDateTime end) {
+        return  Duration.between(start, end).toMillis();
     }
 
 }
