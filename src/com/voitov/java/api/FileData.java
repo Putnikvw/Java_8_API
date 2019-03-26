@@ -28,24 +28,41 @@ public class FileData {
         return readFile(ABBREVIATION_FILE_PATH);
     }
 
-    public void createRacer() {
+    public String createRacer() {
         StringBuilder finalString = new StringBuilder();
-        for(String loop: getAbbrevFile().split("\n"))
-        {
+        for (String loop : getAbbrevFile().split("\n")) {
             String startTime = Arrays.stream(getStartLogFile()
                     .split("\n"))
                     .filter(x -> x.contains(loop.substring(0, 3)))
+                    .findFirst()
                     .map(x -> x.substring(3))
-                    .findFirst().toString();
+                    .map(x-> x.replace("_", "!"))
+                    .get();
             String endTime = Arrays.stream(getEndLogFile()
                     .split("\n"))
                     .filter(x -> x.contains(loop.substring(0, 3)))
+                    .findFirst()
                     .map(x -> x.substring(3))
-                    .findFirst().toString();
+                    .map(x-> x.replace("_", "!"))
+                    .get();
 
-            finalString.append(loop).append(countLapTime(startTime, endTime));
-            getRacer(finalString.toString());
+            finalString.append(loop)
+                       .append("&")
+                       .append(countLapTime(startTime, endTime))
+                       .append("\n");
         }
+        return finalString.toString();
+
+    }
+
+    public Racer getRacer(String fileDataString) {
+
+        Racer racer = new Racer();
+        racer.setAbbrev(fileDataString.substring(0, fileDataString.indexOf("_")));
+        racer.setName(fileDataString.substring(fileDataString.indexOf("_") + 1, fileDataString.lastIndexOf("_")));
+        racer.setCar(fileDataString.substring(fileDataString.lastIndexOf("_") + 1,  fileDataString.indexOf("&")));
+        racer.setTime(fileDataString.substring(fileDataString.indexOf("&") + 1));
+        return racer;
 
     }
 
@@ -61,23 +78,11 @@ public class FileData {
         return log.toString();
     }
 
-    private Racer getRacer(String fileDataString) {
-
-        DateTimeFormatter currentDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
-        Racer racer = new Racer();
-        racer.setAbbrev(fileDataString.substring(0, fileDataString.indexOf("_")));
-        racer.setName(fileDataString.substring(fileDataString.indexOf("_") + 1, fileDataString.lastIndexOf("_")));
-        racer.setCar(fileDataString.substring(fileDataString.lastIndexOf("_")));
-        racer.setTime(LocalDateTime.parse(fileDataString.substring(fileDataString.lastIndexOf("_")), currentDateTime));
-        return racer;
-
-    }
-
     private String countLapTime(String startTime, String endTime) {
-        DateTimeFormatter currentDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss.SSS");
+        DateTimeFormatter currentDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd!HH:mm:ss.SSS");
         LocalDateTime start = LocalDateTime.parse(startTime, currentDateTime);
         LocalDateTime end = LocalDateTime.parse(endTime, currentDateTime);
-        return (new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS")).format(Duration.between(start, end));
+        return (new SimpleDateFormat("mm:ss:SSS")).format(Duration.between(start, end).toMillis());
     }
 
     //        time = tempMap.entrySet().stream()
