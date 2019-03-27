@@ -3,7 +3,6 @@ package com.voitov.java.api;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,7 +27,8 @@ public class FileData {
         return readFile(ABBREVIATION_FILE_PATH);
     }
 
-    public String createRacer() {
+    public String getDataForRacer() {
+
         StringBuilder finalString = new StringBuilder();
         for (String loop : getAbbrevFile().split("\n")) {
             String startTime = Arrays.stream(getStartLogFile()
@@ -52,7 +52,6 @@ public class FileData {
                        .append("\n");
         }
         return finalString.toString();
-
     }
 
     public Racer getRacer(String fileDataString) {
@@ -61,7 +60,7 @@ public class FileData {
         racer.setAbbrev(fileDataString.substring(0, fileDataString.indexOf("_")));
         racer.setName(fileDataString.substring(fileDataString.indexOf("_") + 1, fileDataString.lastIndexOf("_")));
         racer.setCar(fileDataString.substring(fileDataString.lastIndexOf("_") + 1,  fileDataString.indexOf("&")));
-        racer.setTime(fileDataString.substring(fileDataString.indexOf("&") + 1));
+        racer.setTime(Integer.valueOf(fileDataString.substring(fileDataString.indexOf("&") + 1)));
         return racer;
 
     }
@@ -78,16 +77,12 @@ public class FileData {
         return log.toString();
     }
 
-    private String countLapTime(String startTime, String endTime) {
+    private long countLapTime(String startTime, String endTime) {
         DateTimeFormatter currentDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd!HH:mm:ss.SSS");
         LocalDateTime start = LocalDateTime.parse(startTime, currentDateTime);
         LocalDateTime end = LocalDateTime.parse(endTime, currentDateTime);
-        return (new SimpleDateFormat("mm:ss:SSS")).format(Duration.between(start, end).toMillis());
+        return Duration.between(start, end).toMillis();
     }
-
-    //        time = tempMap.entrySet().stream()
-//                .sorted(comparingByValue())
-//                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
 
 }
 

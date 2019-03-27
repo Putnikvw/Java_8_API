@@ -1,16 +1,16 @@
 package com.voitov.java.api;
 
 
+import java.util.ArrayList;
+
 public class Main {
     public static void main(String[] args) {
-        Racer racer;
         FileData file = new FileData();
+        ArrayList<Racer> list = new ArrayList<>();
 
-        for (String loop: file.createRacer().split("\n")) {
-            racer = file.getRacer(loop);
-            System.out.println(racer.getAbbrev() + "\n" + racer.getName() + "\n" + racer.getCar() + "\n"
-                    +  racer.getTime());
+        for (String loop: file.getDataForRacer().split("\n")) {
+            list.add(file.getRacer(loop));
         }
-
+        System.out.println(new Painter().racersString(list));
     }
 }

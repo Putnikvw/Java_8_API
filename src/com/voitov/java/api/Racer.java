@@ -5,7 +5,7 @@ public class Racer {
     private String name;
     private String abbrev;
     private String car;
-    private String time;
+    private long time;
 
     public String getName() {
         return name;
@@ -19,10 +19,9 @@ public class Racer {
         return car;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
-
 
 
     public void setName(String name) {
@@ -37,11 +36,8 @@ public class Racer {
         this.car = car;
     }
 
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
-
-
-
 
 }
