@@ -1,11 +1,13 @@
 package com.voitov.java.api;
 
-public class Racer {
+import java.time.Duration;
+
+public class Racer implements Comparable<Racer> {
 
     private String name;
     private String abbrev;
     private String car;
-    private long time;
+    private Duration time;
 
     public String getName() {
         return name;
@@ -19,7 +21,7 @@ public class Racer {
         return car;
     }
 
-    public long getTime() {
+    public Duration getTime() {
         return time;
     }
 
@@ -36,8 +38,12 @@ public class Racer {
         this.car = car;
     }
 
-    public void setTime(long time) {
+    public void setTime(Duration time) {
         this.time = time;
     }
 
+    @Override
+    public int compareTo(Racer o) {
+        return 0;
+    }
 }

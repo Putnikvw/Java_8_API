@@ -6,7 +6,9 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class FileData {
 
@@ -27,7 +29,23 @@ public class FileData {
         return readFile(ABBREVIATION_FILE_PATH);
     }
 
-    public String getDataForRacer() {
+    public List<Racer> getRacer() {
+
+        List<Racer> list = new ArrayList<>();
+
+        for (String loop : getDataForRacer().split("\n")) {
+
+            Racer racer = new Racer();
+            racer.setAbbrev(loop.substring(0, loop.indexOf("_")));
+            racer.setName(loop.substring(loop.indexOf("_") + 1, loop.lastIndexOf("_")));
+            racer.setCar(loop.substring(loop.lastIndexOf("_") + 1, loop.indexOf("&")));
+            racer.setTime(Duration.parse(loop.substring(loop.indexOf("&") + 1)));
+            list.add(racer);
+        }
+        return list;
+    }
+
+    private String getDataForRacer() {
 
         StringBuilder finalString = new StringBuilder();
         for (String loop : getAbbrevFile().split("\n")) {
@@ -36,33 +54,22 @@ public class FileData {
                     .filter(x -> x.contains(loop.substring(0, 3)))
                     .findFirst()
                     .map(x -> x.substring(3))
-                    .map(x-> x.replace("_", "!"))
+                    .map(x -> x.replace("_", "!"))
                     .get();
             String endTime = Arrays.stream(getEndLogFile()
                     .split("\n"))
                     .filter(x -> x.contains(loop.substring(0, 3)))
                     .findFirst()
                     .map(x -> x.substring(3))
-                    .map(x-> x.replace("_", "!"))
+                    .map(x -> x.replace("_", "!"))
                     .get();
 
             finalString.append(loop)
-                       .append("&")
-                       .append(countLapTime(startTime, endTime))
-                       .append("\n");
+                    .append("&")
+                    .append(countLapTime(startTime, endTime))
+                    .append("\n");
         }
         return finalString.toString();
-    }
-
-    public Racer getRacer(String fileDataString) {
-
-        Racer racer = new Racer();
-        racer.setAbbrev(fileDataString.substring(0, fileDataString.indexOf("_")));
-        racer.setName(fileDataString.substring(fileDataString.indexOf("_") + 1, fileDataString.lastIndexOf("_")));
-        racer.setCar(fileDataString.substring(fileDataString.lastIndexOf("_") + 1,  fileDataString.indexOf("&")));
-        racer.setTime(Integer.valueOf(fileDataString.substring(fileDataString.indexOf("&") + 1)));
-        return racer;
-
     }
 
     private String readFile(String filePath) {
@@ -77,11 +84,11 @@ public class FileData {
         return log.toString();
     }
 
-    private long countLapTime(String startTime, String endTime) {
+    private Duration countLapTime(String startTime, String endTime) {
         DateTimeFormatter currentDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd!HH:mm:ss.SSS");
         LocalDateTime start = LocalDateTime.parse(startTime, currentDateTime);
         LocalDateTime end = LocalDateTime.parse(endTime, currentDateTime);
-        return Duration.between(start, end).toMillis();
+        return Duration.between(start, end);
     }
 
 }
