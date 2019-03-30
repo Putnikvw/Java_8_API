@@ -1,7 +1,7 @@
 package com.voitov.java.api;
 
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 
 public class Painter {
@@ -9,7 +9,7 @@ public class Painter {
     public String racersString(List<Racer> racers) {
 
         StringBuilder race = new StringBuilder();
-        racers.sort(Comparator.comparing(Racer::getTime));
+        Collections.sort(racers);
         for (int i = 1; i < racers.size(); i++) {
             race.append(i)
                     .append(". ")
