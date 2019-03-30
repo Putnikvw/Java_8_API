@@ -17,18 +17,6 @@ public class FileData {
     private static final String ENDLOG_FILE_PATH = "files/end.log";
 
 
-    public String getStartLogFile() {
-        return readFile(STARTLOG_FILE_PATH);
-    }
-
-    public String getEndLogFile() {
-        return readFile(ENDLOG_FILE_PATH);
-    }
-
-    public String getAbbrevFile() {
-        return readFile(ABBREVIATION_FILE_PATH);
-    }
-
     public List<Racer> getRacer() {
 
         List<Racer> list = new ArrayList<>();
@@ -48,15 +36,15 @@ public class FileData {
     private String getDataForRacer() {
 
         StringBuilder finalString = new StringBuilder();
-        for (String loop : getAbbrevFile().split("\n")) {
-            String startTime = Arrays.stream(getStartLogFile()
+        for (String loop : readFile(ABBREVIATION_FILE_PATH).split("\n")) {
+            String startTime = Arrays.stream(readFile(STARTLOG_FILE_PATH)
                     .split("\n"))
                     .filter(x -> x.contains(loop.substring(0, 3)))
                     .findFirst()
                     .map(x -> x.substring(3))
                     .map(x -> x.replace("_", "!"))
                     .get();
-            String endTime = Arrays.stream(getEndLogFile()
+            String endTime = Arrays.stream(readFile(ENDLOG_FILE_PATH)
                     .split("\n"))
                     .filter(x -> x.contains(loop.substring(0, 3)))
                     .findFirst()
