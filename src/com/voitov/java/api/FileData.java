@@ -24,12 +24,10 @@ public class FileData {
 
         for (String loop : getDataForRacer().split("\n")) {
 
-            Racer racer = new Racer();
-            racer.setAbbrev(loop.substring(0, loop.indexOf("_")));
-            racer.setName(loop.substring(loop.indexOf("_") + 1, loop.lastIndexOf("_")));
-            racer.setCar(loop.substring(loop.lastIndexOf("_") + 1, loop.indexOf("&")));
-            racer.setTime(Duration.parse(loop.substring(loop.indexOf("&") + 1)));
-            list.add(racer);
+            String name =loop.substring(loop.indexOf("_") + 1, loop.lastIndexOf("_"));
+            String car = loop.substring(loop.lastIndexOf("_") + 1, loop.indexOf("&"));
+            Duration time = Duration.parse(loop.substring(loop.indexOf("&") + 1));
+            list.add(new Racer(name, car, time));
         }
         return list;
     }

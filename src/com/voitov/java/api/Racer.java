@@ -4,17 +4,18 @@ import java.time.Duration;
 
 public class Racer implements Comparable<Racer> {
 
-    private String name;
-    private String abbrev;
-    private String car;
-    private Duration time;
+    private final String name;
+    private final String car;
+    private final Duration time ;
+
+    public Racer(String name, String car, Duration time) {
+        this.name = name;
+        this.car = car;
+        this.time = time;
+    }
 
     public String getName() {
         return name;
-    }
-
-    public String getAbbrev() {
-        return abbrev;
     }
 
     public String getCar() {
@@ -25,22 +26,6 @@ public class Racer implements Comparable<Racer> {
         return time;
     }
 
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAbbrev(String abbrev) {
-        this.abbrev = abbrev;
-    }
-
-    public void setCar(String car) {
-        this.car = car;
-    }
-
-    public void setTime(Duration time) {
-        this.time = time;
-    }
 
     @Override
     public int compareTo(Racer racer) {
