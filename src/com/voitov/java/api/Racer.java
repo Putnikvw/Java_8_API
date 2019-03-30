@@ -43,7 +43,7 @@ public class Racer implements Comparable<Racer> {
     }
 
     @Override
-    public int compareTo(Racer o) {
-        return 0;
+    public int compareTo(Racer racer) {
+        return this.time.compareTo(racer.getTime());
     }
 }
