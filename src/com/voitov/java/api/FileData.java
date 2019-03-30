@@ -1,6 +1,7 @@
 package com.voitov.java.api;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -37,20 +38,8 @@ public class FileData {
 
         StringBuilder finalString = new StringBuilder();
         for (String loop : readFile(ABBREVIATION_FILE_PATH).split("\n")) {
-            String startTime = Arrays.stream(readFile(STARTLOG_FILE_PATH)
-                    .split("\n"))
-                    .filter(x -> x.contains(loop.substring(0, 3)))
-                    .findFirst()
-                    .map(x -> x.substring(3))
-                    .map(x -> x.replace("_", "!"))
-                    .get();
-            String endTime = Arrays.stream(readFile(ENDLOG_FILE_PATH)
-                    .split("\n"))
-                    .filter(x -> x.contains(loop.substring(0, 3)))
-                    .findFirst()
-                    .map(x -> x.substring(3))
-                    .map(x -> x.replace("_", "!"))
-                    .get();
+            String startTime = getLogFilesData(loop, STARTLOG_FILE_PATH);
+            String endTime = getLogFilesData(loop, ENDLOG_FILE_PATH);
 
             finalString.append(loop)
                     .append("&")
@@ -60,6 +49,16 @@ public class FileData {
         return finalString.toString();
     }
 
+    private String getLogFilesData(String abbrevString, String logFile) {
+        return Arrays.stream(readFile(logFile)
+                .split("\n"))
+                .filter(x -> x.contains(abbrevString.substring(0, 3)))
+                .findFirst()
+                .map(x -> x.substring(3))
+                .map(x -> x.replace("_", "!"))
+                .get();
+    }
+
     private String readFile(String filePath) {
         StringBuilder log = new StringBuilder();
         try {
@@ -67,7 +66,7 @@ public class FileData {
                     .filter(v -> !v.trim().isEmpty())
                     .forEach(x -> log.append(x).append("\n"));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new UncheckedIOException(e);
         }
         return log.toString();
     }
