@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FileData_Test {
+class FileDataTest {
 
     @Test
     public void checkTimeForRacer() {

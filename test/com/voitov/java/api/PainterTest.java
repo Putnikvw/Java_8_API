@@ -3,7 +3,7 @@ package com.voitov.java.api;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Painter_Test {
+public class PainterTest {
     @Test
     public void checkPrintStringForRacer() {
 
