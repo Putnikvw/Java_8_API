@@ -1,9 +1,5 @@
 package com.voitov.java.api;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,24 +18,24 @@ public class FileData {
 
         List<Racer> list = new ArrayList<>();
 
-        for (String loop : getDataForRacer().split("\n")) {
+        for (String dataRacers : getDataForRacer().split("\n")) {
 
-            String name =loop.substring(loop.indexOf("_") + 1, loop.lastIndexOf("_"));
-            String car = loop.substring(loop.lastIndexOf("_") + 1, loop.indexOf("&"));
-            Duration time = Duration.parse(loop.substring(loop.indexOf("&") + 1));
+            String name = dataRacers.substring(dataRacers.indexOf("_") + 1, dataRacers.lastIndexOf("_"));
+            String car = dataRacers.substring(dataRacers.lastIndexOf("_") + 1, dataRacers.indexOf("&"));
+            Duration time = Duration.parse(dataRacers.substring(dataRacers.indexOf("&") + 1));
             list.add(new Racer(name, car, time));
         }
         return list;
     }
 
     private String getDataForRacer() {
-
+        ReadFile reader = new ReadFile();
         StringBuilder finalString = new StringBuilder();
-        for (String loop : readFile(ABBREVIATION_FILE_PATH).split("\n")) {
-            String startTime = getLogFilesData(loop, STARTLOG_FILE_PATH);
-            String endTime = getLogFilesData(loop, ENDLOG_FILE_PATH);
+        for (String abbrevData : reader.readFile(ABBREVIATION_FILE_PATH).split("\n")) {
+            String startTime = getLogFilesData(abbrevData, STARTLOG_FILE_PATH);
+            String endTime = getLogFilesData(abbrevData, ENDLOG_FILE_PATH);
 
-            finalString.append(loop)
+            finalString.append(abbrevData)
                     .append("&")
                     .append(countLapTime(startTime, endTime))
                     .append("\n");
@@ -48,25 +44,12 @@ public class FileData {
     }
 
     private String getLogFilesData(String abbrevString, String logFile) {
-        return Arrays.stream(readFile(logFile)
-                .split("\n"))
+        return Arrays.stream(new ReadFile().readFile(logFile).split("\n"))
                 .filter(x -> x.contains(abbrevString.substring(0, 3)))
                 .findFirst()
                 .map(x -> x.substring(3))
                 .map(x -> x.replace("_", "!"))
                 .get();
-    }
-
-    private String readFile(String filePath) {
-        StringBuilder log = new StringBuilder();
-        try {
-            Files.lines(Paths.get(filePath))
-                    .filter(v -> !v.trim().isEmpty())
-                    .forEach(x -> log.append(x).append("\n"));
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-        return log.toString();
     }
 
     private Duration countLapTime(String startTime, String endTime) {
