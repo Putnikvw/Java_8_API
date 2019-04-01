@@ -7,11 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FileData {
+public class Data {
 
     private static final String ABBREVIATION_FILE_PATH = "files/abbreviations.txt";
     private static final String STARTLOG_FILE_PATH = "files/start.log";
     private static final String ENDLOG_FILE_PATH = "files/end.log";
+    private FileReader fileData = new FileReader();
 
 
     public List<Racer> getRacer() {
@@ -29,9 +30,8 @@ public class FileData {
     }
 
     private String getDataForRacer() {
-        ReadFile reader = new ReadFile();
         StringBuilder finalString = new StringBuilder();
-        for (String abbrevData : reader.readFile(ABBREVIATION_FILE_PATH).split("\n")) {
+        for (String abbrevData : fileData.readFile(ABBREVIATION_FILE_PATH).split("\n")) {
             String startTime = getLogFilesData(abbrevData, STARTLOG_FILE_PATH);
             String endTime = getLogFilesData(abbrevData, ENDLOG_FILE_PATH);
 
@@ -44,7 +44,7 @@ public class FileData {
     }
 
     private String getLogFilesData(String abbrevString, String logFile) {
-        return Arrays.stream(new ReadFile().readFile(logFile).split("\n"))
+        return Arrays.stream(fileData.readFile(logFile).split("\n"))
                 .filter(x -> x.contains(abbrevString.substring(0, 3)))
                 .findFirst()
                 .map(x -> x.substring(3))

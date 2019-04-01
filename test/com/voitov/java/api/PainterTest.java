@@ -1,15 +1,25 @@
 package com.voitov.java.api;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
+@RunWith(MockitoJUnitRunner.class)
 public class PainterTest {
+
+    @InjectMocks
+    private Data fileData;
+    @InjectMocks
+    private Painter print;
+
     @Test
     public void checkPrintStringForRacer() {
 
-        FileData file = new FileData();
-        Painter print = new Painter();
-        String firstRacer = print.racersString(file.getRacer()).substring(0, print.racersString(file.getRacer()).indexOf("\n"));
+        String firstRacer = print.racersString(fileData.getRacer()).substring(0, print.racersString(fileData.getRacer()).indexOf("\n"));
         String racerInTop = "1. Esteban Ocon\t\t| FORCE INDIA MERCEDES\t| 54:13.028";
         assertEquals(racerInTop, firstRacer);
     }

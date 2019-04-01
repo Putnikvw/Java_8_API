@@ -5,7 +5,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class ReadFile {
+public class FileReader {
 
     public String readFile(String filePath) {
         StringBuilder log = new StringBuilder();
