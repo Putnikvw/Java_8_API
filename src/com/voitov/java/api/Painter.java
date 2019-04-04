@@ -10,8 +10,8 @@ public class Painter {
 
         StringBuilder race = new StringBuilder();
         Collections.sort(racers);
-        for (int i = 1; i < racers.size(); i++) {
-            race.append(i)
+        for (int i = 0; i < racers.size(); i++) {
+            race.append(i + 1)
                     .append(". ")
                     .append(racers.get(i).getName())
                     .append("\t\t| ")
