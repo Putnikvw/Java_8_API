@@ -14,7 +14,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DataTest {
+public class RacerBuilderTest {
 
     private final String ABBREV    = "SVF_Sebastian Vettel_FERRARI";
     private final String START_LOG = "SVF2018-05-24_12:02:58.917";
@@ -22,10 +22,10 @@ public class DataTest {
 
 
     @Mock
-    FileReader fileReader;
+    private FileReader fileReader;
 
     @InjectMocks
-    RacerBuilder fileData;
+    private RacerBuilder fileData;
 
     @Test
     public void checkTimeForRacer() {

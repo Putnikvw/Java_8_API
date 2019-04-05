@@ -18,13 +18,13 @@ public class PainterTest {
     private final String END_LOG   = "EOF2018-05-24_12:12:11.838";
 
     @Mock
-    FileReader fileReader;
+    private FileReader fileReader;
 
     @InjectMocks
-    RacerBuilder fileData;
+    private RacerBuilder fileData;
 
     @InjectMocks
-    Painter print;
+    private Painter print;
 
     @Test
     public void checkPrintStringForRacer() {
