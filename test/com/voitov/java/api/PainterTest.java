@@ -23,12 +23,10 @@ public class PainterTest {
     @InjectMocks
     private RacerBuilder fileData;
 
-    @InjectMocks
-    private Painter print;
 
     @Test
     public void checkPrintStringForRacer() {
-
+        Painter print = new Painter();
         String finalPrint = "1. Esteban Ocon\t\t| FORCE INDIA MERCEDES\t| 54:13.028\n";
         when(fileReader.readFile(anyString())).thenReturn(ABBREV).thenReturn(START_LOG).thenReturn(END_LOG);
         assertEquals(print.racersString(fileData.getRacer()), finalPrint);
