@@ -3,7 +3,7 @@ package com.voitov.java.api;
 
 public class Main {
     public static void main(String[] args) {
-        Data file = new Data();
+        RacerBuilder file = new RacerBuilder();
         System.out.println(new Painter().racersString(file.getRacer()));
     }
 }

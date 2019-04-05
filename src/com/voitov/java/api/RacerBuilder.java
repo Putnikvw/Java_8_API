@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Data {
+public class RacerBuilder {
 
     private static final String ABBREVIATION_FILE_PATH = "files/abbreviations.txt";
     private static final String STARTLOG_FILE_PATH = "files/start.log";
