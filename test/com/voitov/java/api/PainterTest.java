@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
@@ -20,16 +21,18 @@ public class PainterTest {
     @Mock
     private FileReader fileReader;
 
+    @Mock
+    Painter print;
+
     @InjectMocks
     private RacerBuilder fileData;
 
 
     @Test
     public void checkPrintStringForRacer() {
-        Painter print = new Painter();
-        String finalPrint = "1. Esteban Ocon\t\t| FORCE INDIA MERCEDES\t| 54:13.028\n";
+        when(print.racersString(anyList())).thenReturn("1. Esteban Ocon\t\t| FORCE INDIA MERCEDES\t| 54:13.028\n");
         when(fileReader.readFile(anyString())).thenReturn(ABBREV).thenReturn(START_LOG).thenReturn(END_LOG);
-        assertEquals(print.racersString(fileData.getRacer()), finalPrint);
+        assertEquals(print.racersString(fileData.getRacer()), print.racersString(anyList()));
 
     }
 }
